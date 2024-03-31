@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  django:
+    build: ./django
+    volumes:
+      - ./django:/app
+    depends_on:
+      - redis
+    expose:
+      - "8000"
+    environment:
+      - REDIS_HOST=redis
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - django
+
+  redis:
+    build: ./redis
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:
